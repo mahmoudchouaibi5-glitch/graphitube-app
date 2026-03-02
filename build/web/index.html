@@ -8,10 +8,32 @@
   <meta name="description" content="Graphitube - نجارة خشبية مخصصة">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <!-- Had l-koud k-i-sl7 l-mouchkil dyal l-canvas f l-web -->
   <style>
-    flt-glass-pane {
+    /* Reset margins and force white background on the browser level */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      background-color: #FFFFFF !important;
+      overflow: hidden; /* Prevents unwanted scrolls */
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Ensure Flutter container fills the whole screen */
+    flt-glass-pane,
+    flt-canvas-container,
+    flutter-view {
       display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      max-width: none !important;
+      max-height: none !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
     }
   </style>
 
