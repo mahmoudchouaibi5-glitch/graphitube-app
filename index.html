@@ -16,11 +16,11 @@
       width: 100% !important;
       height: 100% !important;
       background-color: #FFFFFF !important;
-      overflow: hidden; /* Prevents unwanted scrolls */
+      overflow: hidden;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Ensure Flutter container fills the whole screen */
+    /* Ensure Flutter container fills the whole screen and has no grey background */
     flt-glass-pane,
     flt-canvas-container,
     flutter-view {
@@ -34,13 +34,14 @@
       position: absolute !important;
       top: 0 !important;
       left: 0 !important;
+      background-color: #FFFFFF !important;
     }
   </style>
 
   <title>Graphitube</title>
   <link rel="manifest" href="manifest.json">
 </head>
-<body>
+<body style="background-color: #FFFFFF;">
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
