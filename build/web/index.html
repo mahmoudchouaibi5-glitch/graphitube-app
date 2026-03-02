@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="/">
+  <base href="/" />
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -19,7 +19,10 @@
       overflow: hidden;
       -webkit-tap-highlight-color: transparent;
     }
-
+    body > flutter-view {
+    position: fixed !important;
+    inset: 0 !important;
+    }
     /* Ensure Flutter container fills the whole screen and has no grey background */
     flt-glass-pane,
     flt-canvas-container,
