@@ -156,7 +156,59 @@ class _CutListOptimizerPageState extends State<CutListOptimizerPage> {
   void _showResult() { double sL = double.tryParse(sheetLC.text) ?? 2800, sW = double.tryParse(sheetWC.text) ?? 2100; String unit = isCm ? 'cm' : 'mm'; showModalBottomSheet(context: context, isScrollControlled: true, useSafeArea: true, backgroundColor: Colors.white, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))), builder: (context) => Container(height: MediaQuery.of(context).size.height * 0.9, padding: const EdgeInsets.symmetric(horizontal: 20), child: Column(children: [Container(margin: const EdgeInsets.symmetric(vertical: 15), width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10))), Expanded(child: ListView(children: [const Center(child: Text('نتائج الحساب والتقطيع', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)))), const SizedBox(height: 20), Row(children: [_resultStat('الألواح المطلوبة', '$sheetsNeeded', Icons.layers, Colors.blue), const SizedBox(width: 10), _resultStat('نسبة الضياع', '${totalWastePercent.toStringAsFixed(1)}%', Icons.delete_outline, Colors.red)]), const SizedBox(height: 10), _resultStat('إجمالي شريط الحواف', '${totalEdgeLength.toStringAsFixed(1)} متر', Icons.linear_scale, Colors.orange), const SizedBox(height: 20), ElevatedButton.icon(onPressed: _genPdf, icon: const Icon(Icons.picture_as_pdf), label: const Text('تحميل التقرير النهائي PDF'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, minimumSize: const Size(double.infinity, 50))), const SizedBox(height: 30), ..._packedSheets.asMap().entries.map((entry) => _buildSheetResult(entry.key + 1, entry.value, sL, sW, unit)), const SizedBox(height: 40)]))]))); }
   Widget _resultStat(String l, String v, IconData i, Color c) => Expanded(child: Container(padding: const EdgeInsets.all(15), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15), border: Border.all(color: c.withOpacity(0.1))), child: Column(children: [Icon(i, color: c, size: 24), const SizedBox(height: 8), Text(l, style: TextStyle(fontSize: 12, color: Colors.grey[600])), Text(v, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: c))])));
   Widget _buildSheetResult(int n, List<PlacedPiece> p, double sL, double sW, String u) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Row(children: [Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6), decoration: BoxDecoration(color: const Color(0xFF0F172A), borderRadius: BorderRadius.circular(8)), child: Text('اللوح #$n', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold))), const Spacer(), Text('${sL.toInt()} x ${sW.toInt()} $u', style: TextStyle(color: Colors.grey[600], fontSize: 13))]), const SizedBox(height: 15), Center(child: Container(height: 400, width: double.infinity, decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(15), border: Border.all(color: Colors.grey[300]!)), child: ClipRRect(borderRadius: BorderRadius.circular(15), child: InteractiveViewer(boundaryMargin: const EdgeInsets.all(100), minScale: 0.1, maxScale: 5.0, child: Center(child: FittedBox(fit: BoxFit.contain, child: _buildVisualMap(p, sL, sW))))))), const SizedBox(height: 30)]);
-  Widget _buildVisualMap(List<PlacedPiece> placed, double sL, double sW) { if (sL <= 0) return const SizedBox.shrink(); return Column(children: [Row(mainAxisSize: MainAxisSize.min, children: [Container(width: sL, height: sW, decoration: BoxDecoration(color: const Color(0xFFF3E5AB), borderRadius: BorderRadius.circular(4), border: Border.all(color: const Color(0xFF5D4037), width: 5.0)), child: Stack(clipBehavior: Clip.none, children: placed.map((p) => Positioned(left: p.x, top: p.y, child: Container(width: p.w, height: p.h, decoration: BoxDecoration(color: p.color, border: Border.all(color: Colors.black.withOpacity(0.5), width: 2.0)), child: Center(child: Text(p.label, style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.black87), overflow: TextOverflow.clip))))).toList())), const SizedBox(width: 20), RotatedBox(quarterTurns: 1, child: Text('${sW.toInt()}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 50)))]), const SizedBox(height: 20), Text('${sL.toInt()}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 50))]); }
+  Widget _buildVisualMap(List<PlacedPiece> placed, double sL, double sW) {
+    if (sL <= 0) return const SizedBox.shrink();
+
+    const double maxDisplaySize = 600.0;
+    double scale = maxDisplaySize / (sL > sW ? sL : sW);
+    double displayW = sL * scale;
+    double displayH = sW * scale;
+
+    return Column(children: [
+      Row(mainAxisSize: MainAxisSize.min, children: [
+        Container(
+            width: displayW,
+            height: displayH,
+            decoration: BoxDecoration(
+                color: const Color(0xFFF3E5AB),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: const Color(0xFF5D4037), width: 3.0)
+            ),
+            child: Stack(
+                clipBehavior: Clip.none,
+                children: placed.map((p) => Positioned(
+                    left: p.x * scale,
+                    top: p.y * scale,
+                    child: Container(
+                        width: p.w * scale,
+                        height: p.h * scale,
+                        decoration: BoxDecoration(
+                            color: p.color,
+                            border: Border.all(color: Colors.black.withOpacity(0.5), width: 1.0)
+                        ),
+                        child: Center(child: Text(
+                          p.label,
+                          style: TextStyle(
+                              fontSize: (p.w * scale * 0.12).clamp(8, 16),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87
+                          ),
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.center,
+                        ))
+                    )
+                )).toList()
+            )
+        ),
+        const SizedBox(width: 10),
+        RotatedBox(quarterTurns: 1,
+            child: Text('${sW.toInt()}',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)))
+      ]),
+      const SizedBox(height: 8),
+      Text('${sL.toInt()}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14))
+    ]);
+  }
   Future<void> _genPdf() async {
     final af = await PdfGoogleFonts.amiriRegular(), ab = await PdfGoogleFonts.amiriBold();
     final doc = pw.Document(); final res = ArabicReshaper(); String cu = isCm ? 'cm' : 'mm';

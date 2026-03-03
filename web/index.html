@@ -8,9 +8,29 @@
   <meta name="description" content="Graphitube - نجارة خشبية مخصصة">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <!-- Had l-koud k-i-sl7 l-mouchkil dyal l-canvas f l-web -->
   <style>
-    flt-glass-pane {
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    body {
+      position: fixed;
+      inset: 0;
+    }
+
+    flutter-view {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    canvas {
       display: block !important;
     }
   </style>
@@ -18,7 +38,7 @@
   <title>Graphitube</title>
   <link rel="manifest" href="manifest.json">
 </head>
-<body>
+<body style="background-color: #FFFFFF;">
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

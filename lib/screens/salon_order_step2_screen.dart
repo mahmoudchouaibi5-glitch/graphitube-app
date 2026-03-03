@@ -24,7 +24,7 @@ class SalonOrderStep2Screen extends ConsumerWidget {
           shadowColor: Colors.black.withOpacity(0.1),
           centerTitle: true,
           title: SizedBox(
-            height: 20,
+            height: 25,
             child: Image.asset('assets/images/logo.png', fit: BoxFit.contain),
           ),
           leading: IconButton(

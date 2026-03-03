@@ -60,7 +60,7 @@ class _SalonOrderStep1ScreenState extends State<SalonOrderStep1Screen> {
           shadowColor: Colors.black.withOpacity(0.1),
           centerTitle: true,
           title: SizedBox(
-            height: 20,
+            height: 25,
             child: Image.asset('assets/images/logo.png', fit: BoxFit.contain),
           ),
           leading: IconButton(
